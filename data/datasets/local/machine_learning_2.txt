@@ -1,0 +1,8 @@
+Artificial Intelligence encompasses machine learning, which is the science of making 
+computer systems that can learn and improve by themselves. These systems are able to 
+automatically gain knowledge from data and experience without explicit programming. 
+Machine learning algorithms process information and identify patterns within datasets, 
+enabling systems to make decisions based on learned knowledge. This technology uses 
+observations, historical data, and examples as inputs to discover meaningful patterns. 
+The objective of machine learning is to create autonomous systems that enhance their 
+performance through experience and data analysis.

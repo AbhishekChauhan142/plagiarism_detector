@@ -1,0 +1,803 @@
+<!-- templates/simple_index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📄 Plagiarism Detector</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 900px;
+            width: 100%;
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 50px 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 40px 30px;
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        .tab {
+            padding: 12px 20px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 1em;
+            color: #999;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        .tab:hover {
+            color: #667eea;
+        }
+        
+        .tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .upload-section {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .upload-area {
+            border: 3px dashed #667eea;
+            border-radius: 15px;
+            padding: 50px 30px;
+            background: #f8f9ff;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .upload-area:hover {
+            border-color: #764ba2;
+            background: #f0f2ff;
+        }
+        
+        .upload-area.dragover {
+            border-color: #764ba2;
+            background: #e8ebff;
+            transform: scale(1.02);
+        }
+        
+        .upload-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+        
+        .upload-text {
+            font-size: 1.2em;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .upload-subtext {
+            color: #999;
+            font-size: 0.95em;
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-block;
+            margin-top: 15px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn:active {
+            transform: translateY(-1px);
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            margin-left: 10px;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 30px;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .error {
+            background: #ffe5e5;
+            color: #c62828;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            display: none;
+            border-left: 4px solid #c62828;
+        }
+        
+        .error.show {
+            display: block;
+        }
+        
+        .success {
+            background: #e5ffe5;
+            color: #2e7d32;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            display: none;
+            border-left: 4px solid #2e7d32;
+        }
+        
+        .success.show {
+            display: block;
+        }
+        
+        .results {
+            display: none;
+            margin-top: 30px;
+        }
+        
+        .results.show {
+            display: block;
+        }
+        
+        .verdict-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            border-left: 5px solid #667eea;
+        }
+        
+        .verdict {
+            text-align: center;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+        
+        .verdict.plagiarized {
+            background: #ffe5e5;
+            color: #c62828;
+            border: 2px solid #c62828;
+        }
+        
+        .verdict.original {
+            background: #e5ffe5;
+            color: #2e7d32;
+            border: 2px solid #2e7d32;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-box {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid #eee;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .stat-label {
+            color: #999;
+            font-size: 0.9em;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .stat-value {
+            font-size: 2.2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .matches-section {
+            margin-top: 25px;
+        }
+        
+        .matches-section h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+        
+        .match-item {
+            background: white;
+            border: 1px solid #eee;
+            border-radius: 10px;
+            padding: 15px 20px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        .match-item:hover {
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+            transform: translateX(5px);
+        }
+        
+        .match-info {
+            flex: 1;
+        }
+        
+        .match-name {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .match-scores {
+            font-size: 0.85em;
+            color: #999;
+        }
+        
+        .match-score-badge {
+            background: #667eea;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            white-space: nowrap;
+            margin-left: 15px;
+        }
+        
+        .match-score-badge.high {
+            background: #c62828;
+        }
+        
+        .match-score-badge.medium {
+            background: #f57c00;
+        }
+        
+        .match-score-badge.low {
+            background: #2e7d32;
+        }
+        
+        .db-list {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+        }
+        
+        .db-item {
+            padding: 12px 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 3px solid #667eea;
+        }
+        
+        .db-item-name {
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .db-category {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f0f2ff;
+            border-radius: 10px;
+        }
+        
+        .db-category h4 {
+            color: #667eea;
+            margin-bottom: 12px;
+            font-size: 1.1em;
+        }
+        
+        .db-source-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .db-stat {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .db-stat-label {
+            color: #999;
+            font-size: 0.85em;
+            margin-bottom: 5px;
+        }
+        
+        .db-stat-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .instructions {
+            background: #f0f2ff;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        
+        .instructions strong {
+            color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>📄 Plagiarism Detector</h1>
+            <p>Check if your document is plagiarized using AI</p>
+        </div>
+        
+        <!-- Content -->
+        <div class="content">
+            <!-- Tabs -->
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab(event, 'check')">🔍 Check Document</button>
+                <button class="tab" onclick="switchTab(event, 'add')">➕ Add to Database</button>
+                <button class="tab" onclick="switchTab(event, 'database')">📚 Database</button>
+            </div>
+            
+            <!-- Check Tab -->
+            <div id="check" class="tab-content active">
+                <div class="instructions">
+                    <strong>How to use:</strong> Upload a document (PDF or TXT) to check if it contains plagiarized content. 
+                    The system will compare it against all documents in the database.
+                </div>
+                
+                <div class="upload-section">
+                    <div class="upload-area" id="uploadArea" onclick="document.getElementById('fileInput').click()">
+                        <div class="upload-icon">📤</div>
+                        <div class="upload-text">Click to upload or drag & drop</div>
+                        <div class="upload-subtext">PDF or TXT files (Max 16MB)</div>
+                    </div>
+                    <input type="file" id="fileInput" class="file-input" accept=".pdf,.txt" onchange="handleFileSelect(event)">
+                </div>
+                
+                <div class="error" id="error"></div>
+                
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <p>Checking document...</p>
+                </div>
+                
+                <div class="results" id="results"></div>
+            </div>
+            
+            <!-- Add Tab -->
+            <div id="add" class="tab-content">
+                <div class="instructions">
+                    <strong>Add to Database:</strong> Upload documents to add them to the detection database. 
+                    Future uploads will be compared against these documents.
+                </div>
+                
+                <div class="upload-section">
+                    <div class="upload-area" id="uploadArea2" onclick="document.getElementById('fileInput2').click()">
+                        <div class="upload-icon">📚</div>
+                        <div class="upload-text">Add document to database</div>
+                        <div class="upload-subtext">PDF or TXT files</div>
+                    </div>
+                    <input type="file" id="fileInput2" class="file-input" accept=".pdf,.txt" onchange="handleAddToDb(event)">
+                </div>
+                
+                <div class="error" id="error2"></div>
+                <div class="success" id="success2"></div>
+                <div id="addResult"></div>
+            </div>
+            
+            <!-- Database Tab -->
+            <div id="database" class="tab-content">
+                <div class="instructions">
+                    <strong>Database Information:</strong> View all documents in the detection database, including the PAN dataset.
+                </div>
+                
+                <button class="btn" onclick="showDatabaseStats()" style="width: 100%; margin-bottom: 20px;">
+                    📊 Refresh Database
+                </button>
+                
+                <div id="dbStats"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Drag & drop functionality
+        const uploadArea = document.getElementById('uploadArea');
+        const uploadArea2 = document.getElementById('uploadArea2');
+        
+        [uploadArea, uploadArea2].forEach(area => {
+            area.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                area.classList.add('dragover');
+            });
+            
+            area.addEventListener('dragleave', () => {
+                area.classList.remove('dragover');
+            });
+        });
+        
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            const file = e.dataTransfer.files[0];
+            if (file) {
+                document.getElementById('fileInput').files = e.dataTransfer.files;
+                handleFileSelect({ target: { files: e.dataTransfer.files } });
+            }
+        });
+        
+        uploadArea2.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea2.classList.remove('dragover');
+            const file = e.dataTransfer.files[0];
+            if (file) {
+                document.getElementById('fileInput2').files = e.dataTransfer.files;
+                handleAddToDb({ target: { files: e.dataTransfer.files } });
+            }
+        });
+        
+        function switchTab(event, tab) {
+            event.preventDefault();
+            
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(tab).classList.add('active');
+            event.target.classList.add('active');
+        }
+        
+        function showError(message, elementId = 'error') {
+            const errorDiv = document.getElementById(elementId);
+            errorDiv.textContent = `❌ ${message}`;
+            errorDiv.classList.add('show');
+            setTimeout(() => errorDiv.classList.remove('show'), 5000);
+        }
+        
+        function showSuccess(message, elementId = 'success2') {
+            const successDiv = document.getElementById(elementId);
+            successDiv.textContent = `✅ ${message}`;
+            successDiv.classList.add('show');
+            setTimeout(() => successDiv.classList.remove('show'), 5000);
+        }
+        
+        async function handleFileSelect(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            const formData = new FormData();
+            formData.append('file', file);
+            
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('results').classList.remove('show');
+            document.getElementById('error').classList.remove('show');
+            
+            try {
+                const response = await fetch('/api/check', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                document.getElementById('loading').style.display = 'none';
+                
+                if (!response.ok) {
+                    showError(data.error);
+                    return;
+                }
+                
+                displayResults(data);
+            } catch (error) {
+                document.getElementById('loading').style.display = 'none';
+                showError(error.message);
+            }
+        }
+        
+        function getScoreBadgeClass(score) {
+            if (score > 0.7) return 'high';
+            if (score > 0.5) return 'medium';
+            return 'low';
+        }
+        
+        function displayResults(data) {
+            const verdictClass = data.plagiarism_detected ? 'plagiarized' : 'original';
+            const verdictText = data.plagiarism_detected ? 
+                '⚠️ PLAGIARISM DETECTED' : 
+                '✅ ORIGINAL CONTENT';
+            
+            let html = `
+                <div class="verdict-card">
+                    <div class="verdict ${verdictClass}">${verdictText}</div>
+                    
+                    <div class="stats">
+                        <div class="stat-box">
+                            <div class="stat-label">Max Similarity</div>
+                            <div class="stat-value">${(data.max_similarity * 100).toFixed(1)}%</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-label">Documents Checked</div>
+                            <div class="stat-value">${data.total_matches}</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-label">Document Length</div>
+                            <div class="stat-value">${data.document_length}</div>
+                        </div>
+                    </div>
+            `;
+            
+            if (data.matches && data.matches.length > 0) {
+                html += `
+                    <div class="matches-section">
+                        <h3>🔍 Top Matches</h3>
+                `;
+                
+                data.matches.forEach(match => {
+                    const scoreClass = getScoreBadgeClass(match.combined);
+                    const scoreBadge = `${(match.combined * 100).toFixed(1)}%`;
+                    
+                    html += `
+                        <div class="match-item">
+                            <div class="match-info">
+                                <div class="match-name">${match.document}</div>
+                                <div class="match-scores">
+                                    TF-IDF: ${(match.tfidf * 100).toFixed(1)}% | 
+                                    S-BERT: ${(match.sbert * 100).toFixed(1)}%
+                                </div>
+                            </div>
+                            <div class="match-score-badge ${scoreClass}">${scoreBadge}</div>
+                        </div>
+                    `;
+                });
+                
+                html += `</div>`;
+            }
+            
+            html += `</div>`;
+            
+            document.getElementById('results').innerHTML = html;
+            document.getElementById('results').classList.add('show');
+        }
+        
+        async function handleAddToDb(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            const formData = new FormData();
+            formData.append('file', file);
+            
+            try {
+                const response = await fetch('/api/add-to-db', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    showError(data.error, 'error2');
+                    return;
+                }
+                
+                document.getElementById('fileInput2').value = '';
+                showSuccess(`Document "${data.filename}" added successfully!`);
+                
+                document.getElementById('addResult').innerHTML = `
+                    <div style="background: #e5ffe5; color: #2e7d32; padding: 15px; border-radius: 10px; margin-top: 15px; border-left: 4px solid #2e7d32;">
+                        ✅ Document added to database!<br>
+                        <small>Filename: ${data.filename}<br>Size: ${data.size.toLocaleString()} characters</small>
+                    </div>
+                `;
+            } catch (error) {
+                showError(error.message, 'error2');
+            }
+        }
+        
+        async function showDatabaseStats() {
+            try {
+                const response = await fetch('/api/db-stats');
+                const data = await response.json();
+                
+                let html = `
+                    <div class="db-list">
+                        <h3 style="margin-bottom: 20px; color: #667eea;">📊 Database Overview</h3>
+                        
+                        <div class="db-source-stats">
+                            <div class="db-stat">
+                                <div class="db-stat-label">Total Documents</div>
+                                <div class="db-stat-value">${data.total_documents}</div>
+                            </div>
+                            <div class="db-stat">
+                                <div class="db-stat-label">Total Size</div>
+                                <div class="db-stat-value">${(data.total_size / 1000).toFixed(1)} KB</div>
+                            </div>
+                        </div>
+                        
+                        <div style="background: #f0f2ff; padding: 15px; border-radius: 10px; margin-top: 20px;">
+                            <h4 style="color: #667eea; margin-bottom: 12px;">📚 Documents by Source</h4>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px;">
+                                <div style="background: white; padding: 10px; border-radius: 8px; text-align: center;">
+                                    <div style="color: #999; font-size: 0.85em;">Database</div>
+                                    <div style="font-size: 1.5em; font-weight: bold; color: #667eea;">${data.sources.database}</div>
+                                </div>
+                                <div style="background: white; padding: 10px; border-radius: 8px; text-align: center;">
+                                    <div style="color: #999; font-size: 0.85em;">PAN Local</div>
+                                    <div style="font-size: 1.5em; font-weight: bold; color: #667eea;">${data.sources.pan_local}</div>
+                                </div>
+                                <div style="background: white; padding: 10px; border-radius: 8px; text-align: center;">
+                                    <div style="color: #999; font-size: 0.85em;">PAN Plagiarism</div>
+                                    <div style="font-size: 1.5em; font-weight: bold; color: #667eea;">${data.sources.pan_plagiarism}</div>
+                                </div>
+                                <div style="background: white; padding: 10px; border-radius: 8px; text-align: center;">
+                                    <div style="color: #999; font-size: 0.85em;">PAN Test</div>
+                                    <div style="font-size: 1.5em; font-weight: bold; color: #667eea;">${data.sources.pan_test}</div>
+                                </div>
+                            </div>
+                        </div>
+                `;
+                
+                // Custom Documents
+                if (data.categories.database.length > 0) {
+                    html += `
+                        <div class="db-category">
+                            <h4>📁 Custom Documents (${data.categories.database.length})</h4>
+                            ${data.categories.database.map(doc => 
+                                `<div class="db-item"><span class="db-item-name">📄 ${doc.replace('db_', '')}</span></div>`
+                            ).join('')}
+                        </div>
+                    `;
+                }
+                
+                // PAN Local
+                if (data.categories.pan_local.length > 0) {
+                    html += `
+                        <div class="db-category">
+                            <h4>📚 PAN Academic Texts (${data.categories.pan_local.length})</h4>
+                            ${data.categories.pan_local.map(doc => 
+                                `<div class="db-item"><span class="db-item-name">📖 ${doc.replace('pan_local_', '')}</span></div>`
+                            ).join('')}
+                        </div>
+                    `;
+                }
+                
+                // PAN Plagiarism
+                if (data.categories.pan_plagiarism.length > 0) {
+                    html += `
+                        <div class="db-category">
+                            <h4>⚠️ PAN Plagiarism Examples (${data.categories.pan_plagiarism.length})</h4>
+                            ${data.categories.pan_plagiarism.map(doc => 
+                                `<div class="db-item"><span class="db-item-name">⚠️ ${doc.replace('pan_plagiarism_', '')}</span></div>`
+                            ).join('')}
+                        </div>
+                    `;
+                }
+                
+                // PAN Test
+                if (data.categories.pan_test.length > 0) {
+                    html += `
+                        <div class="db-category">
+                            <h4>🧪 PAN Test Documents (${data.categories.pan_test.length})</h4>
+                            ${data.categories.pan_test.map(doc => 
+                                `<div class="db-item"><span class="db-item-name">🧪 ${doc.replace('pan_test_', '')}</span></div>`
+                            ).join('')}
+                        </div>
+                    `;
+                }
+                
+                html += `</div>`;
+                document.getElementById('dbStats').innerHTML = html;
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('dbStats').innerHTML = '<p>Error loading database stats</p>';
+            }
+        }
+        
+        // Load database stats on page load
+        window.addEventListener('load', () => {
+            showDatabaseStats();
+        });
+    </script>
+</body>
+</html>

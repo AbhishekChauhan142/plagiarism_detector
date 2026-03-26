@@ -1,0 +1,8 @@
+Deep learning is part of a broader family of machine learning methods based on artificial 
+neural networks with representation learning. Learning can be supervised, semi-supervised 
+or unsupervised. Deep learning architectures such as convolutional neural networks, 
+recurrent neural networks and transformers have been applied to fields including 
+computer vision, speech recognition, natural language processing, audio recognition, 
+social network filtering, machine translation, bioinformatics, drug discovery and 
+game playing. Results on benchmark datasets such as MNIST, CIFAR and ImageNet show 
+that deep neural networks are approaching or sometimes exceeding human level performance.

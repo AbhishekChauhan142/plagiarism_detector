@@ -1,0 +1,1 @@
+Deep learning is a neural network approach within machine learning that uses multiple layers. It has revolutionized computer vision and natural language processing. Deep neural networks can automatically learn the representations needed for detection or classification.

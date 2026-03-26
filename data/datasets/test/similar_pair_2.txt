@@ -1,0 +1,1 @@
+Neural networks with many layers are employed in deep learning to analyze information.

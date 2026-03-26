@@ -1,0 +1,8 @@
+=== PLAGIARISM DETECTION RESULTS ===
+
+comparison:
+  tfidf_similarity: 0.3713
+  sbert_similarity: 0.9466
+  combined_similarity: 0.7165
+  plagiarism_detected: True
+

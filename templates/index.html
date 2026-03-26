@@ -1,0 +1,532 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔍 Plagiarism Detector</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            padding: 30px;
+        }
+        
+        .input-section h2 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        
+        .document {
+            margin-bottom: 25px;
+        }
+        
+        .document label {
+            display: block;
+            color: #667eea;
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+        
+        textarea {
+            width: 100%;
+            height: 200px;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            resize: vertical;
+            transition: border-color 0.3s;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        button {
+            flex: 1;
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        button:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        .config-section h2 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        
+        .slider-group {
+            margin-bottom: 25px;
+        }
+        
+        .slider-group label {
+            display: block;
+            color: #666;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        
+        input[type="range"] {
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: #ddd;
+            outline: none;
+            -webkit-appearance: none;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #667eea;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb:hover {
+            background: #764ba2;
+            transform: scale(1.2);
+        }
+        
+        input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #667eea;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s;
+        }
+        
+        input[type="range"]::-moz-range-thumb:hover {
+            background: #764ba2;
+            transform: scale(1.2);
+        }
+        
+        .value-display {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        
+        .demo-buttons {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .demo-buttons button {
+            background: #764ba2;
+        }
+        
+        .demo-buttons button:hover {
+            background: #667eea;
+        }
+        
+        .results-section {
+            grid-column: 1 / -1;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #eee;
+        }
+        
+        .results-section h2 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        
+        .result-card {
+            background: #f8f9fa;
+            border-left: 5px solid #667eea;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .result-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .result-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #eee;
+        }
+        
+        .result-item label {
+            display: block;
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 8px;
+        }
+        
+        .result-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .percentage {
+            font-size: 0.8em;
+            color: #999;
+            margin-top: 5px;
+        }
+        
+        .verdict {
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: bold;
+            text-align: center;
+            font-size: 1.2em;
+            margin-top: 15px;
+        }
+        
+        .verdict.plagiarism {
+            background: #ffe5e5;
+            color: #c62828;
+            border: 2px solid #c62828;
+        }
+        
+        .verdict.original {
+            background: #e5ffe5;
+            color: #2e7d32;
+            border: 2px solid #2e7d32;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .error {
+            background: #ffe5e5;
+            color: #c62828;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            display: none;
+        }
+        
+        .error.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔍 PLAGIARISM DETECTOR</h1>
+            <p>TF-IDF + S-BERT Hybrid Detection System</p>
+        </div>
+        
+        <div class="content">
+            <!-- Input Section -->
+            <div class="input-section">
+                <h2>📄 Documents</h2>
+                
+                <div class="document">
+                    <label for="text1">Document 1</label>
+                    <textarea id="text1" placeholder="Enter or paste your first document here..."></textarea>
+                    <div class="button-group">
+                        <button onclick="clearText('text1')">🗑️ Clear</button>
+                    </div>
+                </div>
+                
+                <div class="document">
+                    <label for="text2">Document 2</label>
+                    <textarea id="text2" placeholder="Enter or paste your second document here..."></textarea>
+                    <div class="button-group">
+                        <button onclick="clearText('text2')">🗑️ Clear</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Configuration Section -->
+            <div class="config-section">
+                <h2>⚙️ Configuration</h2>
+                
+                <div class="slider-group">
+                    <label>
+                        TF-IDF Weight (Lexical)
+                        <span class="value-display" id="tfidf_display">0.40</span>
+                    </label>
+                    <input type="range" id="tfidf_weight" min="0" max="1" step="0.1" value="0.4" 
+                           oninput="updateDisplay('tfidf_weight', 'tfidf_display')">
+                </div>
+                
+                <div class="slider-group">
+                    <label>
+                        S-BERT Weight (Semantic)
+                        <span class="value-display" id="sbert_display">0.60</span>
+                    </label>
+                    <input type="range" id="sbert_weight" min="0" max="1" step="0.1" value="0.6" 
+                           oninput="updateDisplay('sbert_weight', 'sbert_display')">
+                </div>
+                
+                <button onclick="detect()" style="width: 100%; padding: 15px; font-size: 1.1em;">
+                    🔍 Detect Plagiarism
+                </button>
+                
+                <div class="demo-buttons">
+                    <button onclick="runDemo('identical')">📌 Demo: Identical</button>
+                    <button onclick="runDemo('paraphrased')">📌 Demo: Paraphrased</button>
+                    <button onclick="runDemo('different')">📌 Demo: Different</button>
+                </div>
+                
+                <button onclick="generateReport()" style="width: 100%; margin-top: 10px; background: #764ba2;">
+                    📊 Generate Report
+                </button>
+            </div>
+            
+            <!-- Results Section -->
+            <div class="results-section">
+                <h2>📋 Results</h2>
+                
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <p>Analyzing documents...</p>
+                </div>
+                
+                <div class="error" id="error"></div>
+                
+                <div id="results"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function updateDisplay(inputId, displayId) {
+            const value = document.getElementById(inputId).value;
+            document.getElementById(displayId).textContent = parseFloat(value).toFixed(2);
+        }
+        
+        function clearText(elementId) {
+            document.getElementById(elementId).value = '';
+        }
+        
+        function showError(message) {
+            const errorDiv = document.getElementById('error');
+            errorDiv.textContent = message;
+            errorDiv.classList.add('show');
+            setTimeout(() => errorDiv.classList.remove('show'), 5000);
+        }
+        
+        async function detect() {
+            const text1 = document.getElementById('text1').value.trim();
+            const text2 = document.getElementById('text2').value.trim();
+            const tfidf_weight = parseFloat(document.getElementById('tfidf_weight').value);
+            const sbert_weight = parseFloat(document.getElementById('sbert_weight').value);
+            
+            if (!text1 || !text2) {
+                showError('❌ Both documents must contain text!');
+                return;
+            }
+            
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('results').innerHTML = '';
+            
+            try {
+                const response = await fetch('/api/detect', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        text1, text2, tfidf_weight, sbert_weight
+                    })
+                });
+                
+                const data = await response.json();
+                document.getElementById('loading').style.display = 'none';
+                
+                if (!response.ok) {
+                    showError(`❌ ${data.error}`);
+                    return;
+                }
+                
+                displayResults(data);
+            } catch (error) {
+                document.getElementById('loading').style.display = 'none';
+                showError(`❌ Error: ${error.message}`);
+            }
+        }
+        
+        async function runDemo(type) {
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('results').innerHTML = '';
+            
+            try {
+                const response = await fetch('/api/demo', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ type })
+                });
+                
+                const data = await response.json();
+                document.getElementById('loading').style.display = 'none';
+                
+                if (!response.ok) {
+                    showError(`❌ ${data.error}`);
+                    return;
+                }
+                
+                document.getElementById('text1').value = data.text1;
+                document.getElementById('text2').value = data.text2;
+                displayResults(data.result);
+            } catch (error) {
+                document.getElementById('loading').style.display = 'none';
+                showError(`❌ Error: ${error.message}`);
+            }
+        }
+        
+        function displayResults(result) {
+            const tfidf = (result.tfidf_similarity * 100).toFixed(2);
+            const sbert = (result.sbert_similarity * 100).toFixed(2);
+            const combined = (result.combined_similarity * 100).toFixed(2);
+            
+            const verdictClass = result.plagiarism_detected ? 'plagiarism' : 'original';
+            const verdictText = result.plagiarism_detected ? 
+                '⚠️ PLAGIARISM DETECTED' : 
+                '✓ ORIGINAL CONTENT';
+            
+            const html = `
+                <div class="result-card">
+                    <div class="result-row">
+                        <div class="result-item">
+                            <label>TF-IDF Similarity</label>
+                            <div class="result-value">${result.tfidf_similarity.toFixed(4)}</div>
+                            <div class="percentage">${tfidf}%</div>
+                        </div>
+                        <div class="result-item">
+                            <label>S-BERT Similarity</label>
+                            <div class="result-value">${result.sbert_similarity.toFixed(4)}</div>
+                            <div class="percentage">${sbert}%</div>
+                        </div>
+                        <div class="result-item">
+                            <label>Combined Score</label>
+                            <div class="result-value">${result.combined_similarity.toFixed(4)}</div>
+                            <div class="percentage">${combined}%</div>
+                        </div>
+                    </div>
+                    <div class="verdict ${verdictClass}">
+                        ${verdictText}
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('results').innerHTML = html;
+        }
+        
+        async function generateReport() {
+            try {
+                const response = await fetch('/api/report');
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    showError(`❌ ${data.error}`);
+                    return;
+                }
+                
+                alert(`✓ Report generated!\n\nPath: ${data.path}\n\nResults: ${data.results.length}`);
+            } catch (error) {
+                showError(`❌ Error: ${error.message}`);
+            }
+        }
+    </script>
+</body>
+</html>

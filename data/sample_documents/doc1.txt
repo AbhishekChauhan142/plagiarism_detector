@@ -1,0 +1,1 @@
+Machine learning is a subset of artificial intelligence that focuses on the development of algorithms and statistical models. These models enable computers to improve their performance on tasks through experience and data analysis. Machine learning has applications in various fields including computer vision, natural language processing, and predictive analytics.

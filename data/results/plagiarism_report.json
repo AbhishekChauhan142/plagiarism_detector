@@ -1,0 +1,88 @@
+{
+  "timestamp": "2026-03-26 20:30:01",
+  "total_comparisons": 10,
+  "plagiarism_detected": 0,
+  "average_similarity": 0.2303,
+  "results": [
+    {
+      "doc1": "doc1",
+      "doc2": "doc2",
+      "tfidf": 0.1795,
+      "sbert": 0.8929,
+      "combined": 0.6075,
+      "plagiarism": false
+    },
+    {
+      "doc1": "doc1",
+      "doc2": "doc3",
+      "tfidf": 0.1602,
+      "sbert": 0.6018,
+      "combined": 0.4252,
+      "plagiarism": false
+    },
+    {
+      "doc1": "doc1",
+      "doc2": "doc4",
+      "tfidf": 0.0521,
+      "sbert": 0.2417,
+      "combined": 0.1658,
+      "plagiarism": false
+    },
+    {
+      "doc1": "doc1",
+      "doc2": "doc5",
+      "tfidf": 0.0171,
+      "sbert": 0.1814,
+      "combined": 0.1157,
+      "plagiarism": false
+    },
+    {
+      "doc1": "doc2",
+      "doc2": "doc3",
+      "tfidf": 0.0826,
+      "sbert": 0.5951,
+      "combined": 0.3901,
+      "plagiarism": false
+    },
+    {
+      "doc1": "doc2",
+      "doc2": "doc4",
+      "tfidf": 0.0199,
+      "sbert": 0.2181,
+      "combined": 0.1388,
+      "plagiarism": false
+    },
+    {
+      "doc1": "doc2",
+      "doc2": "doc5",
+      "tfidf": 0.01,
+      "sbert": 0.185,
+      "combined": 0.115,
+      "plagiarism": false
+    },
+    {
+      "doc1": "doc3",
+      "doc2": "doc4",
+      "tfidf": 0.0095,
+      "sbert": 0.1913,
+      "combined": 0.1186,
+      "plagiarism": false
+    },
+    {
+      "doc1": "doc3",
+      "doc2": "doc5",
+      "tfidf": 0.0,
+      "sbert": 0.2439,
+      "combined": 0.1464,
+      "plagiarism": false
+    },
+    {
+      "doc1": "doc4",
+      "doc2": "doc5",
+      "tfidf": 0.0098,
+      "sbert": 0.1264,
+      "combined": 0.0798,
+      "plagiarism": false
+    }
+  ]
+}
