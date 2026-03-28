@@ -1,7 +1,0 @@
-Neural networks are computing systems inspired by biological neural networks that 
-constitute animal brains. Such artificial neural networks have interconnected nodes 
-in layered structures that mimic biological neurons. An artificial neuron receives 
-signals, processes them, and can signal neurons connected to it. The signals traveling 
-between artificial neurons are real numbers, and the output of each neuron is computed 
-by some non-linear function of the sum of its inputs. Neurons and edges typically have 
-weights that adjust as learning proceeds. The network learns by modifying weights.

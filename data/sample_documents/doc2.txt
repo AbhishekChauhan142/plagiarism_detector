@@ -1,1 +1,0 @@
-Machine learning, a branch of AI, involves creating algorithms and statistical models that allow computers to enhance their performance by learning from data. This technology is applied in multiple domains such as image recognition, language understanding, and forecasting systems.

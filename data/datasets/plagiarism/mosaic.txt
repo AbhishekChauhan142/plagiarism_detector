@@ -1,5 +1,0 @@
-
-Artificial intelligence encompasses machine learning, which provides systems the ability 
-to automatically learn. Computer programs can access data and use it for self-improvement. 
-This technology focuses on developing applications that enhance performance through 
-experience without explicit programming instructions.
