@@ -181,6 +181,7 @@ def plot_similarity_distribution(
     similarities: List[float],
     labels: List[int],
     save_path: Optional[str] = None,
+    title: Optional[str] = None,
 ) -> "plt.Figure":
     """Histogram of similarity scores split by class label.
 
@@ -189,6 +190,7 @@ def plot_similarity_distribution(
         labels: Binary labels (0 = clean, 1 = plagiarised) aligned with
             *similarities*.
         save_path: Optional file path to save the figure.
+        title: Optional title for the plot.
 
     Returns:
         The :class:`matplotlib.figure.Figure` object.
@@ -225,7 +227,7 @@ def plot_similarity_distribution(
 
     ax.set_xlabel("Similarity Score", fontsize=12)
     ax.set_ylabel("Count", fontsize=12)
-    ax.set_title("Similarity Score Distribution by Class", fontsize=14)
+    ax.set_title(title if title else "Similarity Score Distribution by Class", fontsize=14)
     ax.legend(fontsize=11)
     ax.grid(axis="y", alpha=0.3)
     fig.tight_layout()

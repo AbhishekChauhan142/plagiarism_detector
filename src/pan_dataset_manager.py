@@ -125,7 +125,7 @@ class PANDatasetManager:
             "source": (
                 "Photosynthesis is the process used by plants, algae and certain bacteria "
                 "to harness energy from sunlight and turn it into chemical energy. This "
-                "stored chemical energy is used for the organisms activities."
+                "stored chemical energy is used for the organism's activities."
             ),
             "suspicious": (
                 "Cloud computing is the on-demand availability of computer system resources, "
@@ -160,7 +160,7 @@ class PANDatasetManager:
             ),
             "suspicious": (
                 "The theory of evolution by natural selection was first formulated in "
-                "Charles Darwins book On the Origin of Species. Natural selection is the "
+                "Charles Darwin's book On the Origin of Species. Natural selection is the "
                 "process by which organisms that are better adapted to their environment "
                 "tend to survive and produce more offspring."
             ),
