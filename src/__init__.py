@@ -1,5 +1,9 @@
 # src/__init__.py
-from .plagiarism_detector import PlagiarismDetector
+try:
+    from .plagiarism_detector import PlagiarismDetector
+except ImportError:
+    PlagiarismDetector = None  # type: ignore[assignment,misc]
+
 from .preprocessor import TextPreprocessor
 from .similarity_calculator import SimilarityCalculator
 from .utils import load_document, save_results

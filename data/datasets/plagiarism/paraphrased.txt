@@ -1,5 +1,0 @@
-
-Machine learning, a component of artificial intelligence, enables computer systems 
-to automatically learn and enhance performance based on experience without explicit 
-programming instructions. Machine learning centers on creating computer applications 
-that can obtain information and utilize it for self-learning purposes.

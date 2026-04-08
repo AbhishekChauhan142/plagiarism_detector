@@ -1,8 +1,0 @@
-Computer vision is an interdisciplinary scientific field that deals with how computers 
-can gain high-level understanding from digital images and videos. From the perspective 
-of engineering, it seeks to understand and automate tasks that the human visual system 
-can do. Computer vision tasks include methods for acquiring, processing, analyzing and 
-understanding digital images and extracting high-dimensional data from the real world 
-to produce numerical or symbolic information. Technologies such as convolutional neural 
-networks have dramatically improved the accuracy of computer vision systems. Applications 
-include medical imaging, autonomous vehicles, and facial recognition.
